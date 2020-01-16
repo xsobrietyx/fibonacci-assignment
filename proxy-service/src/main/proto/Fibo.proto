@@ -1,0 +1,16 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_generic_services = true;
+package proxy.service.grpc.contracts;
+
+message FibonacciRequest {
+    int32 number = 1;
+}
+
+message FibonacciResponse {
+    string message = 1;
+}
+
+service FibonacciService {
+    rpc getFibonacciSeq (FibonacciRequest) returns (FibonacciResponse) {}
+}

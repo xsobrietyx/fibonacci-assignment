@@ -7,8 +7,10 @@
     * Created git repo on GitHub
     * Configured remote
     * Pushing initial commit
-* Investigated the GRPc
-    * Added common GRPc dependencies to the parent pom
+* Investigated the gRPC
+    * Added common gRPC dependencies to the parent pom
 * Added Spring boot and Jersey dependencies to the proxy-service module
 * Polished initial structure
 * Proceed with core project structure configuration
+* Jersey and REST endpoint(s) configuration
+* Completed the basic flow without unit tests, exception handling and fibonacci function
