@@ -10,7 +10,8 @@ public class ProducerApplication {
     public static void main(String[] args) throws IOException, InterruptedException {
         Server server = ServerBuilder
                 .forPort(8082)
-                .addService(new FibonacciProducerServiceImpl()).build();
+                .addService(new FibonacciProducerServiceImpl())
+                .build();
 
         server.start();
         server.awaitTermination();

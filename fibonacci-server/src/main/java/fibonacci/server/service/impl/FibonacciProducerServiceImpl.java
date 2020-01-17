@@ -11,7 +11,10 @@ public class FibonacciProducerServiceImpl extends FibonacciServiceGrpc.Fibonacci
 
     @Override
     public void getFibonacciSeq(FibonacciRequest request, StreamObserver<FibonacciResponse> responseObserver) {
-        FibonacciResponse response = FibonacciResponse.newBuilder().setMessage(getFibs(request.getNumber())).build();
+        FibonacciResponse response = FibonacciResponse
+                .newBuilder()
+                .setMessage(getFibs(request.getNumber()))
+                .build();
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();

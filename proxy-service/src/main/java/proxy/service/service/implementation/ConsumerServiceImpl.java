@@ -20,7 +20,8 @@ public class ConsumerServiceImpl implements ConsumerService<Integer, String> {
     @PostConstruct
     private void init(){
         // Address name and port could be extracted to properties file
-        managedChannel = ManagedChannelBuilder.forAddress("localhost", 8082)
+        managedChannel = ManagedChannelBuilder
+                .forAddress("localhost", 8082)
                 .usePlaintext()
                 .build();
 
@@ -35,7 +36,10 @@ public class ConsumerServiceImpl implements ConsumerService<Integer, String> {
     @Override
     public String getResult(Integer value) {
 
-        FibonacciRequest req = FibonacciRequest.newBuilder().setNumber(value).build();
+        FibonacciRequest req = FibonacciRequest
+                .newBuilder()
+                .setNumber(value)
+                .build();
 
         FibonacciResponse helloResponse = stub.getFibonacciSeq(req);
 
