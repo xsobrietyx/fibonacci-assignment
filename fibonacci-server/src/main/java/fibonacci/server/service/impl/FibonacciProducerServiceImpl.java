@@ -5,7 +5,7 @@ import proxy.service.grpc.contracts.FibonacciRequest;
 import proxy.service.grpc.contracts.FibonacciResponse;
 import proxy.service.grpc.contracts.FibonacciServiceGrpc;
 
-import static utilities.Fibonacci.getFibs;
+import static utilities.FibonacciUtilService.getFibs;
 
 public class FibonacciProducerServiceImpl extends FibonacciServiceGrpc.FibonacciServiceImplBase {
 
