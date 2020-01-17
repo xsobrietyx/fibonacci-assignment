@@ -6,16 +6,14 @@ import org.springframework.stereotype.Component;
 import proxy.service.grpc.contracts.FibonacciRequest;
 import proxy.service.grpc.contracts.FibonacciResponse;
 import proxy.service.grpc.contracts.FibonacciServiceGrpc;
-import proxy.service.service.FibonacciConsumerService;
+import proxy.service.service.ConsumerService;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 @Component
-public class FibonacciConsumerServiceImpl implements FibonacciConsumerService {
-    /*
-        Managed channel could be closed the next way, if necessary:
-        managedChannel.shutdown();
-     */
+public class ConsumerServiceImpl implements ConsumerService<Integer, String> {
+
     private ManagedChannel managedChannel;
     private FibonacciServiceGrpc.FibonacciServiceBlockingStub stub;
 
@@ -29,10 +27,15 @@ public class FibonacciConsumerServiceImpl implements FibonacciConsumerService {
         stub = FibonacciServiceGrpc.newBlockingStub(managedChannel);
     }
 
-    @Override
-    public String getResult(int value) {
+    @PreDestroy
+    private void preDestroyHandler(){
+        managedChannel.shutdown();
+    }
 
-        FibonacciRequest req = FibonacciRequest.newBuilder().setNumber(5).build();
+    @Override
+    public String getResult(Integer value) {
+
+        FibonacciRequest req = FibonacciRequest.newBuilder().setNumber(value).build();
 
         FibonacciResponse helloResponse = stub.getFibonacciSeq(req);
 
