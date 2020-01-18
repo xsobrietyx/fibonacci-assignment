@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import proxy.service.service.ConsumerService;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -23,7 +25,11 @@ public class FibonacciEndpoint {
 
     @GET
     @Path("/{val}")
-    public String getFibonacci(@PathParam("val") String val) {
+    public String getFibonacci(
+            @PathParam("val")
+            @NotNull
+            @Pattern(regexp = "\\d+")
+            String val) {
         return consumerService.getResult(Integer.parseInt(val));
     }
 }
