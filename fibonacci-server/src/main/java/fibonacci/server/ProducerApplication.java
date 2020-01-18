@@ -13,7 +13,9 @@ public class ProducerApplication {
                 .forPort(port)
                 .addService(new FibonacciProducerServiceImpl())
                 .build();
+
         System.out.printf("%s%s%s\n", "\u001B[32m", "Producer server successfully started on port ", port);
+
         server.start();
         server.awaitTermination();
     }

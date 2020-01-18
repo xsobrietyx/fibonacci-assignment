@@ -30,6 +30,7 @@ public class FibonacciEndpoint {
             @NotNull
             @Pattern(regexp = "\\d+")
             String val) {
+        // Min/Max path param constraints could be added, but not necessary in current case
         return consumerService.getResult(Integer.parseInt(val));
     }
 }
