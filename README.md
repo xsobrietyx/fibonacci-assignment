@@ -17,6 +17,7 @@
 * Unit tests for fibonacci-server (producer) added (basic happy path scenario).
 
 #Library picks and decisions
+
 SpringBoot for out of the box application server (Tomcat), dependency injection, fast enough configuration, good documentation, good integration
 with other libraries.
 For restful endpoints I picked up Jersey (full implementation of JAX-RS) because it's lightweight, convenient, and provides a large variety
