@@ -16,7 +16,7 @@
 * Completed the basic flow without unit tests, exception handling and fibonacci function
 * Unit tests for fibonacci-server (producer) added (basic happy path scenario).
 
-#Library picks and decisions
+# Library picks and decisions
 
 SpringBoot for out of the box application server (Tomcat), dependency injection, fast enough configuration, good documentation, good integration
 with other libraries.
