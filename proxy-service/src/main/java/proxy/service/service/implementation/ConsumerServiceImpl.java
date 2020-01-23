@@ -40,16 +40,20 @@ public class ConsumerServiceImpl implements ConsumerService<Integer, Integer> {
     public Integer getResult(Integer value) {
 
         if(!stateInitialized) {
-            FibonacciRequest req = FibonacciRequest
-                    .newBuilder()
-                    .setNumber(value)
-                    .build();
-
-            internalState = stub.getFibonacciSeq(req);
-
-            stateInitialized = true;
+            initializeInternalState(value);
         }
 
         return internalState.hasNext() ? internalState.next().getChunk() : -1;
+    }
+
+    private void initializeInternalState(Integer value){
+        FibonacciRequest req = FibonacciRequest
+                .newBuilder()
+                .setNumber(value)
+                .build();
+
+        internalState = stub.getFibonacciSeq(req);
+
+        stateInitialized = true;
     }
 }
