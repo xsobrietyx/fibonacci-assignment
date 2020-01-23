@@ -17,15 +17,15 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 public class FibonacciEndpoint {
 
-    private final ConsumerService<Integer, String> consumerService;
+    private final ConsumerService<Integer, Integer> consumerService;
 
-    public FibonacciEndpoint(@Autowired ConsumerService<Integer, String> consumerService) {
+    public FibonacciEndpoint(@Autowired ConsumerService<Integer, Integer> consumerService) {
         this.consumerService = consumerService;
     }
 
     @GET
     @Path("/{val}")
-    public String getFibonacci(
+    public Integer getFibonacci(
             @PathParam("val")
             @NotNull
             @Pattern(regexp = "\\d+")

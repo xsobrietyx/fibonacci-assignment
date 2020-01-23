@@ -10,12 +10,15 @@ import proxy.service.service.ConsumerService;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.Iterator;
 
 @Component
-public class ConsumerServiceImpl implements ConsumerService<Integer, String> {
+public class ConsumerServiceImpl implements ConsumerService<Integer, Integer> {
 
     private ManagedChannel managedChannel;
     private FibonacciServiceGrpc.FibonacciServiceBlockingStub stub;
+    private Iterator<FibonacciResponse> internalState;
+    private boolean stateInitialized;
 
     @PostConstruct
     private void init(){
@@ -34,15 +37,19 @@ public class ConsumerServiceImpl implements ConsumerService<Integer, String> {
     }
 
     @Override
-    public String getResult(Integer value) {
+    public Integer getResult(Integer value) {
 
-        FibonacciRequest req = FibonacciRequest
-                .newBuilder()
-                .setNumber(value)
-                .build();
+        if(!stateInitialized) {
+            FibonacciRequest req = FibonacciRequest
+                    .newBuilder()
+                    .setNumber(value)
+                    .build();
 
-        FibonacciResponse helloResponse = stub.getFibonacciSeq(req);
+            internalState = stub.getFibonacciSeq(req);
 
-        return helloResponse.getMessage();
+            stateInitialized = true;
+        }
+
+        return internalState.hasNext() ? internalState.next().getChunk() : -1;
     }
 }

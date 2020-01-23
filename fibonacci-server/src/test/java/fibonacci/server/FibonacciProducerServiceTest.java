@@ -13,6 +13,7 @@ import proxy.service.grpc.contracts.FibonacciResponse;
 import proxy.service.grpc.contracts.FibonacciServiceGrpc;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
 
@@ -27,7 +28,7 @@ public class FibonacciProducerServiceTest {
         // Generate a unique in-process server name.
         String serverName = InProcessServerBuilder.generateName();
 
-        // Create a server, add service, start, and register for automatic graceful shutdown.
+        // Create a server, add service, start, and register for automatic shutdown.
         grpcCleanupRule.register(InProcessServerBuilder
                 .forName(serverName)
                 .directExecutor()
@@ -35,7 +36,7 @@ public class FibonacciProducerServiceTest {
                 .build()
                 .start());
 
-        // Create a client channel and register for automatic graceful shutdown.
+        // Create a client channel and register for automatic shutdown.
         FibonacciServiceGrpc.FibonacciServiceBlockingStub blockingStub = FibonacciServiceGrpc
                 .newBlockingStub(grpcCleanupRule.register(InProcessChannelBuilder
                                 .forName(serverName)
@@ -43,13 +44,20 @@ public class FibonacciProducerServiceTest {
                                 .build()));
 
 
-        FibonacciResponse reply = blockingStub
+        Iterator<FibonacciResponse> reply = blockingStub
                 .getFibonacciSeq(FibonacciRequest
                         .newBuilder()
                         .setNumber(17)
                         .build());
 
-        assertEquals("0,1,1,2,3,5,8,13", reply.getMessage());
+        assertEquals(0, reply.next().getChunk());
+        assertEquals(1, reply.next().getChunk());
+        assertEquals(1, reply.next().getChunk());
+        assertEquals(2, reply.next().getChunk());
+        assertEquals(3, reply.next().getChunk());
+        assertEquals(5, reply.next().getChunk());
+        assertEquals(8, reply.next().getChunk());
+        assertEquals(13, reply.next().getChunk());
     }
 
 }

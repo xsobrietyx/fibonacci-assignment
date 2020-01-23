@@ -8,9 +8,9 @@ message FibonacciRequest {
 }
 
 message FibonacciResponse {
-    string message = 1;
+    int32 chunk = 1;
 }
 
 service FibonacciService {
-    rpc getFibonacciSeq (FibonacciRequest) returns (FibonacciResponse) {}
+    rpc getFibonacciSeq (FibonacciRequest) returns (stream FibonacciResponse) {}
 }
