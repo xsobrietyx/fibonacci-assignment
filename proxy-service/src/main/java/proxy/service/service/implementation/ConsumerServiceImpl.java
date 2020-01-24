@@ -3,6 +3,7 @@ package proxy.service.service.implementation;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 import proxy.service.grpc.contracts.FibonacciRequest;
 import proxy.service.grpc.contracts.FibonacciResponse;
 import proxy.service.grpc.contracts.FibonacciServiceGrpc;
@@ -13,6 +14,10 @@ import javax.annotation.PreDestroy;
 import java.util.Iterator;
 
 @Component
+/*
+    Depends on needs and AC's - bean scope could be Session or Application/Singleton
+ */
+@SessionScope
 public class ConsumerServiceImpl implements ConsumerService<Integer, Integer> {
 
     private ManagedChannel managedChannel;
