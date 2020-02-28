@@ -1,5 +1,6 @@
 package proxy.service.rest.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import proxy.service.service.ConsumerService;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 @Component
 @Path("/fibonacci")
 @Produces(MediaType.APPLICATION_JSON)
+@Slf4j
 public class FibonacciEndpoint {
 
     private final ConsumerService<Integer, Integer> consumerService;
@@ -29,7 +31,8 @@ public class FibonacciEndpoint {
             @PathParam("val")
             @NotNull
             @Pattern(regexp = "\\d+")
-            String val) {
+                    String val) {
+        log.info("action:\"getFibonacci\";from:{};message:Received {} from request", FibonacciEndpoint.class.getSimpleName(), val);
         // Min/Max path param constraints could be added, but not necessary in current case
         return consumerService.getResult(Integer.parseInt(val));
     }

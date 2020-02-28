@@ -5,7 +5,7 @@ import scala.language.postfixOps
 object FibonacciUtilService {
   /* TODO:
       - replace with more simple fibonacci sequence generation solution, fancy one is not appreciated.
-      - add some logging
+      - add some logging *
       - add more unit tests
       - add some setup guide to the readme file
    */
