@@ -18,9 +18,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 @Component
-/*
-    Depends on needs and AC's - bean scope could be Session or Application/Singleton
- */
 @Slf4j
 public class ConsumerServiceImpl implements ConsumerService<Integer, Integer> {
     @Value("${proxyService.port}")
