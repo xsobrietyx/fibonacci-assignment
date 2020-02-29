@@ -13,7 +13,9 @@ import proxy.service.service.ConsumerService;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 @Component
 /*
@@ -25,8 +27,9 @@ public class ConsumerServiceImpl implements ConsumerService<Integer, Integer> {
 
     private ManagedChannel managedChannel;
     private FibonacciServiceGrpc.FibonacciServiceBlockingStub stub;
-    private Iterator<FibonacciResponse> internalState;
-    private boolean stateInitialized;
+
+    private static Map<Integer, Iterator<FibonacciResponse>> cache = new HashMap<>();
+    private static ThreadLocal<Iterator<FibonacciResponse>> internalState = new ThreadLocal<>();
 
     @PostConstruct
     private void init() {
@@ -45,30 +48,24 @@ public class ConsumerServiceImpl implements ConsumerService<Integer, Integer> {
     }
 
     @Override
-    public Integer getResult(Integer value) {
-
-        if (!stateInitialized) {
-            initializeInternalState(value);
-        }
-
-        return internalState.hasNext() ? performResult() : -1;
-    }
-
     @NotNull
-    private Integer performResult() {
-        int result = internalState.next().getChunk();
-        log.info("action:\"performResult\";from:{};message:Returned {} from service", ConsumerServiceImpl.class.getSimpleName(), result);
+    public synchronized Integer getResult(Integer value) {
+        internalState.set(cache.computeIfAbsent(value, this::fetchIterator));
+
+        int result = internalState.get().hasNext() ? internalState.get().next().getChunk() : -1;
+
+        log.info("action:\"getResult\";from:{};message:Returned {} from service",
+                ConsumerServiceImpl.class.getSimpleName(), result);
+
         return result;
     }
 
-    private void initializeInternalState(Integer value) {
+    private Iterator<FibonacciResponse> fetchIterator(Integer value) {
         FibonacciRequest req = FibonacciRequest
                 .newBuilder()
                 .setNumber(value)
                 .build();
 
-        internalState = stub.getFibonacciSeq(req);
-
-        stateInitialized = true;
+        return stub.getFibonacciSeq(req);
     }
 }

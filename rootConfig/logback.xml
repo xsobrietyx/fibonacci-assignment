@@ -1,4 +1,6 @@
-<configuration scan="true" scanPeriod="30 seconds" debug="true">
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <property name="logsFolderName" value="logs"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
@@ -8,13 +10,33 @@
         </encoder>
     </appender>
 
-    <logger name="proxy.service.rest.controller" level="DEBUG"/>
+    <appender name="proxyServiceAppender" class="ch.qos.logback.core.FileAppender">
+        <file>${logsFolderName}/proxyService.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-    <logger name="fibonacci.server" level="INFO"/>
+    <appender name="fibonacciServerAppender" class="ch.qos.logback.core.FileAppender">
+        <file>${logsFolderName}/fibonacciServer.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-    <logger name="io" additivity="false"/>
+    <logger name="proxy.service" level="INFO" additivity="false">
+        <appender-ref ref="proxyServiceAppender"/>
+    </logger>
+
+    <logger name="fibonacci.server" level="INFO" additivity="false">
+        <appender-ref ref="fibonacciServerAppender"/>
+    </logger>
+
+    <logger name="io" level="ERROR" additivity="false"/>
 
     <root level="ERROR">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

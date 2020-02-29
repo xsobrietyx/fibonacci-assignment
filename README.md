@@ -17,7 +17,6 @@
 * Unit tests for fibonacci-server (producer) added (basic happy path scenario).
 
 # Library picks and decisions
-
 SpringBoot for out of the box application server (Tomcat), dependency injection, fast enough configuration, good documentation, good integration
 with other libraries.
 For restful endpoints I picked up Jersey (full implementation of JAX-RS) because it's lightweight, convenient, and provides a large variety
@@ -30,4 +29,21 @@ JUnit was taken as a main and good supported unit testing framework. It also fit
 Also I used some Scala code with scala-maven-plugin for good functional implementation of lazy fibonacci numbers generation. Scala is good 
 because of full compatibility with Java, JVM language with mixed OOP and FP paradigms.  
 Of course as a version control system I picked up Git but also mercurial is good enough.
- 
+
+#Setup guide
+###Preconditions
+* Java8, Maven, Git
+* Intellij Idea plugins:
+    * Lombok
+    * Multirun
+##Run book
+* Read the `*.pdf` from the assignment folder that located in the repo root.
+This will help you to understand the expected behaviour of the solution.
+* Build the root project:`mvn clean install`
+* Configure Idea multirun configuration (if you're running this example locally on your machine).
+Entry point classes to execute are: ProxyServiceApplication, ProducerApplication.
+You can also run this applications separately but both of them should be up and running at the same time to
+perform the result.
+* Proceed to the `localhost:8083/fibonacci/{pathParam}` and get your stream result sequence.
+For traversing your response you should query endpoint again and again.
+The value that indicates that sequence is finished is `-1`.
