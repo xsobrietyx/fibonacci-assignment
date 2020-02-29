@@ -22,7 +22,6 @@ import java.util.Map;
 /*
     Depends on needs and AC's - bean scope could be Session or Application/Singleton
  */
-@SessionScope
 @Slf4j
 public class ConsumerServiceImpl implements ConsumerService<Integer, Integer> {
     @Value("${proxyService.port}")
@@ -32,7 +31,6 @@ public class ConsumerServiceImpl implements ConsumerService<Integer, Integer> {
     private FibonacciServiceGrpc.FibonacciServiceBlockingStub stub;
 
     private static Map<String, Iterator<FibonacciResponse>> cache = new HashMap<>();
-    private static ThreadLocal<Iterator<FibonacciResponse>> internalState = new ThreadLocal<>();
 
     @PostConstruct
     private void init() {
@@ -53,9 +51,9 @@ public class ConsumerServiceImpl implements ConsumerService<Integer, Integer> {
     @Override
     @NotNull
     public synchronized Integer getResult(Integer value) {
-        internalState.set(cache.computeIfAbsent(value.toString(), this::fetchIterator));
+        Iterator<FibonacciResponse> internalState = cache.computeIfAbsent(value.toString(), this::fetchIterator);
 
-        int result = internalState.get().hasNext() ? internalState.get().next().getChunk() : -1;
+        int result = internalState.hasNext() ? internalState.next().getChunk() : -1;
 
         log.info("action:\"getResult\";from:{};message:Returned {} from service",
                 ConsumerServiceImpl.class.getSimpleName(), result);

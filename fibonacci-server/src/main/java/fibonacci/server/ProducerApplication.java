@@ -17,7 +17,7 @@ public class ProducerApplication {
                 .addService(new FibonacciProducerServiceImpl())
                 .build();
 
-        log.info("action:\"main\";from:{};Producer server successfully started on port {}\n",
+        log.info("action:\"main\";from:{};Producer server successfully started on port {}",
                 ProducerApplication.class.getSimpleName(), GRPC_SERVER_PORT);
 
         server.start();
