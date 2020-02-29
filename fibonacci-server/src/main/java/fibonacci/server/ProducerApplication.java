@@ -9,15 +9,16 @@ import java.io.IOException;
 
 @Slf4j
 public class ProducerApplication {
+    private static final int GRPC_SERVER_PORT = 8082;
+
     public static void main(String[] args) throws IOException, InterruptedException {
-        final int port = 8082;
         Server server = ServerBuilder
-                .forPort(port)
+                .forPort(GRPC_SERVER_PORT)
                 .addService(new FibonacciProducerServiceImpl())
                 .build();
 
         log.info("action:\"main\";from:{};Producer server successfully started on port {}\n",
-                ProducerApplication.class.getSimpleName(), port);
+                ProducerApplication.class.getSimpleName(), GRPC_SERVER_PORT);
 
         server.start();
         server.awaitTermination();

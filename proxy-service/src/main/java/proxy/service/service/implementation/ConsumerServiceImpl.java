@@ -3,6 +3,7 @@ package proxy.service.service.implementation;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 import proxy.service.grpc.contracts.FibonacciRequest;
@@ -24,18 +25,20 @@ import java.util.Map;
 @SessionScope
 @Slf4j
 public class ConsumerServiceImpl implements ConsumerService<Integer, Integer> {
+    @Value("${proxyService.port}")
+    private int proxyServicePort;
 
     private ManagedChannel managedChannel;
     private FibonacciServiceGrpc.FibonacciServiceBlockingStub stub;
 
-    private static Map<Integer, Iterator<FibonacciResponse>> cache = new HashMap<>();
+    private static Map<String, Iterator<FibonacciResponse>> cache = new HashMap<>();
     private static ThreadLocal<Iterator<FibonacciResponse>> internalState = new ThreadLocal<>();
 
     @PostConstruct
     private void init() {
         // Address name and port could be extracted to properties file
         managedChannel = ManagedChannelBuilder
-                .forAddress("localhost", 8082)
+                .forAddress("localhost", proxyServicePort)
                 .usePlaintext()
                 .build();
 
@@ -50,7 +53,7 @@ public class ConsumerServiceImpl implements ConsumerService<Integer, Integer> {
     @Override
     @NotNull
     public synchronized Integer getResult(Integer value) {
-        internalState.set(cache.computeIfAbsent(value, this::fetchIterator));
+        internalState.set(cache.computeIfAbsent(value.toString(), this::fetchIterator));
 
         int result = internalState.get().hasNext() ? internalState.get().next().getChunk() : -1;
 
@@ -60,10 +63,10 @@ public class ConsumerServiceImpl implements ConsumerService<Integer, Integer> {
         return result;
     }
 
-    private Iterator<FibonacciResponse> fetchIterator(Integer value) {
+    private Iterator<FibonacciResponse> fetchIterator(String value) {
         FibonacciRequest req = FibonacciRequest
                 .newBuilder()
-                .setNumber(value)
+                .setNumber(Integer.parseInt(value))
                 .build();
 
         return stub.getFibonacciSeq(req);
