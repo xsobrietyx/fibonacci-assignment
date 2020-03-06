@@ -30,15 +30,15 @@ Also I used some Scala code with scala-maven-plugin for good functional implemen
 because of full compatibility with Java, JVM language with mixed OOP and FP paradigms.  
 Of course as a version control system I picked up Git but also mercurial is good enough.
 
-#Setup guide
+# Setup guide
 
-#Preconditions
+# Preconditions
 * Java8, Maven, Git
 * Intellij Idea plugins:
     * Lombok
     * Multirun
     
-#Run book
+# Run book
 * Read the `*.pdf` from the assignment folder that located in the repo root.
 This will help you to understand the expected behaviour of the solution.
 * Build the root project:`mvn clean install`
