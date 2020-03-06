@@ -1,4 +1,5 @@
 # Steps/Thoughts
+[![Build Status](https://travis-ci.com/xsobrietyx/fibonacci-assignment.svg?branch=master)](https://travis-ci.com/xsobrietyx/fibonacci-assignment)
 * Created initial project structure:
     * For proper separation two different Git repositories could be used. But for simplicity I decided to have one
     multi-project build, which holds two services.
